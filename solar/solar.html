@@ -2,142 +2,162 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <title>Solar Calculator with Subsidy (India)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Solar Energy Calculator</title>
-  <link rel="stylesheet" href="../style.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Calculator Container */
-    body {
-      background: linear-gradient(135deg, #1f1c2c, #928dab);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
+    body{
+      margin:0;
+      font-family: "Segoe UI", sans-serif;
+      background:#0f172a;
+      color:#e5e7eb;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
 
-    .calculator {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 30px;
-      width: 350px;
-      max-width: 90%;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
+    .box{
+      width:900px;
+      border:1px solid #1e293b;
+      border-radius:12px;
+      padding:24px;
     }
 
-    .calculator:hover {
-      transform: scale(1.03);
+    h1{
+      text-align:center;
+      color:#38bdf8;
+      margin-bottom:20px;
     }
 
-    .calculator h2 {
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      color: #ffd700;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    .input-row{
+      display:grid;
+      grid-template-columns:2fr auto;
+      gap:12px;
+      margin-bottom:20px;
     }
 
-    .calculator input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-      font-size: 1rem;
+    input{
+      padding:12px;
+      border-radius:6px;
+      border:1px solid #1e293b;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:15px;
     }
 
-    .calculator input::placeholder {
-      color: #e0e0e0;
+    button{
+      padding:12px 20px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-weight:600;
+      background:#38bdf8;
+      color:#020617;
     }
 
-    .calculator button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #ffd700;
-      color: #1f1c2c;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s, transform 0.3s;
+    button:hover{
+      background:#0ea5e9;
     }
 
-    .calculator button:hover {
-      background: #ffec70;
-      transform: scale(1.05);
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:20px;
     }
 
-    .calculator h3 {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      color: #fff;
+    th, td{
+      padding:14px;
+      border-bottom:1px solid #1e293b;
+      text-align:left;
     }
 
-    /* Output style */
-    .highlight {
-      color: #ffd700;
-      font-weight: bold;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    th{
+      color:#94a3b8;
+      font-weight:600;
+    }
+
+    .highlight{
+      color:#22c55e;
+      font-weight:700;
+    }
+
+    .note{
+      margin-top:18px;
+      font-size:14px;
+      color:#94a3b8;
     }
   </style>
 </head>
+
 <body>
 
-  <div class="calculator">
-    <h2>Solar Energy Calculator</h2>
+<div class="box">
+  <h1>☀️ Solar Calculator (India)</h1>
 
-    <input type="number" id="capacity" placeholder="Solar Panel Capacity (kW)">
-    <input type="number" id="sunlight" placeholder="Average Sunlight Hours per Day">
-    <input type="number" id="cost" placeholder="Electricity Cost per kWh (₹)">
-
-    <button id="calculateBtn">Calculate Savings</button>
-
-    <h3 id="result">Enter values to calculate savings</h3>
+  <div class="input-row">
+    <input type="number" id="bill" placeholder="Enter monthly electricity bill (₹)">
+    <button onclick="calculate()">Calculate</button>
   </div>
 
-  <script>
-    const capacityInput = document.getElementById('capacity');
-    const sunlightInput = document.getElementById('sunlight');
-    const costInput = document.getElementById('cost');
-    const result = document.getElementById('result');
+  <table>
+    <tr>
+      <th>Recommended Solar Size</th>
+      <td id="size">–</td>
+    </tr>
+    <tr>
+      <th>System Cost (₹50,000 / kW)</th>
+      <td id="cost">–</td>
+    </tr>
+    <tr>
+      <th>Govt Subsidy</th>
+      <td id="subsidy">–</td>
+    </tr>
+    <tr>
+      <th>Final Cost After Subsidy</th>
+      <td class="highlight" id="final">–</td>
+    </tr>
+    <tr>
+      <th>Monthly Savings</th>
+      <td class="highlight" id="saving">–</td>
+    </tr>
+  </table>
 
-    function calculateSolar() {
-      const capacity = parseFloat(capacityInput.value);
-      const sunlight = parseFloat(sunlightInput.value);
-      const cost = parseFloat(costInput.value);
+  <div class="note">
+    Subsidy based on <b>PM Surya Ghar Yojana</b> (max subsidy up to 3 kW for residential users).
+  </div>
+</div>
 
-      if(isNaN(capacity) || isNaN(sunlight) || isNaN(cost)) {
-        result.innerHTML = "Please enter all values correctly!";
-        return;
-      }
+<script>
+function calculate(){
+  const bill = Number(document.getElementById("bill").value);
+  if(bill<=0){
+    alert("Enter valid monthly bill amount");
+    return;
+  }
 
-      const dailyEnergy = capacity * sunlight; // kWh/day
-      const monthlyEnergy = dailyEnergy * 30; // kWh/month
-      const monthlySavings = monthlyEnergy * cost; // ₹/month
+  // assumptions
+  const unitCost = 8; // ₹ per unit
+  const monthlyUnits = bill / unitCost;
 
-      result.innerHTML = `
-        Daily Energy: <span class="highlight">${dailyEnergy.toFixed(2)} kWh</span><br>
-        Monthly Energy: <span class="highlight">${monthlyEnergy.toFixed(2)} kWh</span><br>
-        Estimated Monthly Savings: <span class="highlight">₹${monthlySavings.toFixed(2)}</span>
-      `;
-    }
+  const size = Math.ceil(monthlyUnits / 120); // 1kW ≈ 120 units/month
+  const systemCost = size * 50000;
 
-    // Event listeners for button and real-time enter
-    document.getElementById('calculateBtn').addEventListener('click', calculateSolar);
-    capacityInput.addEventListener('input', calculateSolar);
-    sunlightInput.addEventListener('input', calculateSolar);
-    costInput.addEventListener('input', calculateSolar);
-  </script>
+  // subsidy logic (India – simplified)
+  let subsidy = 0;
+  if(size === 1) subsidy = 30000;
+  else if(size === 2) subsidy = 60000;
+  else if(size >= 3) subsidy = 78000;
+
+  const finalCost = systemCost - subsidy;
+
+  document.getElementById("size").innerText = size + " kW";
+  document.getElementById("cost").innerText = "₹ " + systemCost.toLocaleString();
+  document.getElementById("subsidy").innerText = "₹ " + subsidy.toLocaleString();
+  document.getElementById("final").innerText = "₹ " + finalCost.toLocaleString();
+  document.getElementById("saving").innerText = "₹ " + bill.toLocaleString() + " / month";
+}
+</script>
 
 </body>
 </html>
