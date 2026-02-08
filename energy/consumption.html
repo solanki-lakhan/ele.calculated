@@ -1,147 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Energy Consumption Calculator</title>
-  <link rel="stylesheet" href="../style.css">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Calculator Container */
     body {
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: #fff;
+      font-family: "Segoe UI", sans-serif;
+      background: #0f172a; /* single solid background */
+      color: #e5e7eb;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
     }
-
-    .calculator {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      padding: 30px;
-      width: 350px;
-      max-width: 90%;
+    h1 {
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: transform 0.3s ease;
+      margin-bottom: 18px;
+      color: #38bdf8;
     }
-
-    .calculator:hover {
-      transform: scale(1.03);
+    .container {
+      width: 900px;
+      background: #0f172a; /* SAME as page background */
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
     }
-
-    .calculator h2 {
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      color: #00ffff;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    .input-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 12px;
+      margin-bottom: 18px;
     }
-
-    .calculator input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255,255,255,0.2);
-      color: #fff;
-      font-size: 1rem;
+    input {
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #1e293b;
+      background: #020617;
+      color: #e5e7eb;
+      outline: none;
     }
-
-    .calculator input::placeholder {
-      color: #e0e0e0;
+    input::placeholder {
+      color: #94a3b8;
     }
-
-    .calculator button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #00ffff;
-      color: #0f2027;
-      font-size: 1.1rem;
-      font-weight: bold;
+    button {
+      padding: 10px 18px;
       cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: #38bdf8;
+      color: #020617;
+      font-weight: 600;
+    }
+    button:hover {
+      background: #0ea5e9;
+    }
+    .list {
       margin-top: 10px;
-      transition: background 0.3s, transform 0.3s;
     }
-
-    .calculator button:hover {
-      background: #66ffff;
-      transform: scale(1.05);
+    .header, .item {
+      display: grid;
+      grid-template-columns: auto 2fr 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 6px;
     }
-
-    .calculator h3 {
-      margin-top: 20px;
-      font-size: 1.1rem;
-      color: #fff;
+    .header {
+      font-weight: 600;
+      color: #94a3b8;
+      border-bottom: 1px solid #1e293b;
     }
-
-    .highlight {
-      color: #00ffff;
+    .item {
+      border-bottom: 1px solid #1e293b;
+    }
+    .item:last-child {
+      border-bottom: none;
+    }
+    .total {
+      position: fixed;
+      right: 24px;
+      bottom: 20px;
+      font-size: 20px;
       font-weight: bold;
-      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+      color: #22c55e;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>⚡ Energy Consumption Calculator</h1>
 
-  <div class="calculator">
-    <h2>Energy Consumption Calculator</h2>
+    <div class="input-row">
+      <input type="text" id="name" placeholder="Appliance name" />
+      <input type="number" id="power" placeholder="Power (W)" />
+      <input type="number" id="hours" placeholder="Hours/day" />
+      <button onclick="addItem()">Add</button>
+    </div>
 
-    <input type="number" id="devicePower" placeholder="Device Power (Watts)">
-    <input type="number" id="usageHours" placeholder="Usage Hours per Day">
-    <input type="number" id="deviceCount" placeholder="Quantity of Devices">
-    <input type="number" id="electricityCost" placeholder="Electricity Cost per kWh (₹)">
-
-    <button id="calculateConsumption">Calculate Consumption</button>
-
-    <h3 id="consumptionResult">Enter values to see consumption & cost</h3>
+    <div class="list" id="list">
+      <div class="header">
+        <div></div>
+        <div>Appliance</div>
+        <div>Power</div>
+        <div>Hours</div>
+        <div>Energy</div>
+      </div>
+    </div>
   </div>
 
+  <div class="total" id="total">Total: 0 kWh/day</div>
+
   <script>
-    const powerInput = document.getElementById('devicePower');
-    const hoursInput = document.getElementById('usageHours');
-    const countInput = document.getElementById('deviceCount');
-    const costInput = document.getElementById('electricityCost');
-    const consumptionResult = document.getElementById('consumptionResult');
+    let appliances = [];
 
-    function calculateConsumption() {
-      const power = parseFloat(powerInput.value);
-      const hours = parseFloat(hoursInput.value);
-      const count = parseFloat(countInput.value);
-      const cost = parseFloat(costInput.value);
+    function addItem() {
+      const name = document.getElementById('name').value;
+      const power = parseFloat(document.getElementById('power').value);
+      const hours = parseFloat(document.getElementById('hours').value);
 
-      if(isNaN(power) || isNaN(hours) || isNaN(count) || isNaN(cost)) {
-        consumptionResult.innerHTML = "Please enter all values correctly!";
+      if (!name || isNaN(power) || isNaN(hours)) {
+        alert('Please fill all fields');
         return;
       }
 
-      const dailyEnergy = (power * hours * count) / 1000; // kWh/day
-      const monthlyEnergy = dailyEnergy * 30; // kWh/month
-      const monthlyCost = monthlyEnergy * cost; // ₹/month
+      appliances.push({ name, power, hours, checked: true });
 
-      consumptionResult.innerHTML = `
-        Daily Consumption: <span class="highlight">${dailyEnergy.toFixed(2)} kWh</span><br>
-        Monthly Consumption: <span class="highlight">${monthlyEnergy.toFixed(2)} kWh</span><br>
-        Estimated Monthly Cost: <span class="highlight">₹${monthlyCost.toFixed(2)}</span>
-      `;
+      document.getElementById('name').value = '';
+      document.getElementById('power').value = '';
+      document.getElementById('hours').value = '';
+
+      render();
     }
 
-    document.getElementById('calculateConsumption').addEventListener('click', calculateConsumption);
+    function toggle(index) {
+      appliances[index].checked = !appliances[index].checked;
+      render();
+    }
 
-    // Real-time calculation while typing
-    powerInput.addEventListener('input', calculateConsumption);
-    hoursInput.addEventListener('input', calculateConsumption);
-    countInput.addEventListener('input', calculateConsumption);
-    costInput.addEventListener('input', calculateConsumption);
+    function render() {
+      const list = document.getElementById('list');
+      list.innerHTML = `
+        <div class="header">
+          <div></div>
+          <div>Appliance</div>
+          <div>Power</div>
+          <div>Hours</div>
+          <div>Energy</div>
+        </div>`;
+
+      let total = 0;
+
+      appliances.forEach((a, i) => {
+        const energy = (a.power * a.hours) / 1000;
+        if (a.checked) total += energy;
+
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `
+          <input type="checkbox" ${a.checked ? 'checked' : ''} onchange="toggle(${i})" />
+          <div>${a.name}</div>
+          <div>${a.power} W</div>
+          <div>${a.hours} h</div>
+          <div>${energy.toFixed(2)} kWh</div>
+        `;
+        list.appendChild(row);
+      });
+
+      document.getElementById('total').innerText = `Total: ${total.toFixed(2)} kWh/day`;
+    }
   </script>
-
 </body>
 </html>
