@@ -1,51 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Energy Management System</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Smart Energy Calculators</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body{
+      margin:0;
+      font-family: "Segoe UI", sans-serif;
+      background:#0f172a;
+      color:#e5e7eb;
+      min-height:100vh;
+    }
+
+    .container{
+      max-width:1000px;
+      margin:auto;
+      padding:40px 20px;
+    }
+
+    h1{
+      font-size:38px;
+      color:#38bdf8;
+      margin-bottom:10px;
+    }
+
+    .tagline{
+      font-size:18px;
+      color:#94a3b8;
+      margin-bottom:40px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:24px;
+    }
+
+    .card{
+      border:1px solid #1e293b;
+      border-radius:12px;
+      padding:24px;
+      background:#0f172a;
+    }
+
+    .card h2{
+      margin-top:0;
+      color:#e5e7eb;
+    }
+
+    .card p{
+      color:#94a3b8;
+      line-height:1.5;
+    }
+
+    .card a{
+      display:inline-block;
+      margin-top:18px;
+      padding:10px 18px;
+      background:#38bdf8;
+      color:#020617;
+      text-decoration:none;
+      border-radius:6px;
+      font-weight:600;
+    }
+
+    .card a:hover{
+      background:#0ea5e9;
+    }
+
+    .info{
+      margin-top:50px;
+      padding-top:30px;
+      border-top:1px solid #1e293b;
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap:20px;
+    }
+
+    .info div{
+      font-size:15px;
+      color:#cbd5f5;
+    }
+
+    footer{
+      margin-top:60px;
+      text-align:center;
+      font-size:14px;
+      color:#64748b;
+    }
+  </style>
 </head>
+
 <body>
-    <!-- Header -->
-    <header>
-        <h1 class="title">Smart Energy Management System</h1>
-        <p class="subtitle">Monitor and optimize your energy usage efficiently</p>
-    </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Cards Section -->
-        <div class="cards-container">
-            <div class="card fade-in">
-                <h2>Real-time Monitoring</h2>
-                <p>Track your energy consumption in real-time and stay updated.</p>
-            </div>
-            <div class="card fade-in delay-1">
-                <h2>Energy Saving Tips</h2>
-                <p>Get personalized tips to reduce energy usage and save money.</p>
-            </div>
-            <div class="card fade-in delay-2">
-                <h2>Usage Analytics</h2>
-                <p>Visualize energy usage patterns with interactive charts.</p>
-            </div>
-        </div>
+<div class="container">
+  <h1> Smart Energy Calculators</h1>
+  <div class="tagline">
+    Simple tools to calculate electricity consumption & solar savings for Indian homes 🇮🇳
+  </div>
 
-        <!-- Buttons to open calculators -->
-        <div style="text-align:center; margin: 40px 0;">
-            <button id="openSolar" class="launch-btn">Open Solar Calculator</button>
-            <button id="openConsumption" class="launch-btn">Open Energy Consumption Calculator</button>
-        </div>
-    </main>
+  <div class="cards">
+    <div class="card">
+      <h2>⚡ Energy Consumption Calculator</h2>
+      <p>
+        Add your electrical appliances, running hours and instantly
+        calculate daily energy usage in kWh.
+      </p>
+      <a href="energy/consumption.html">Try Calculator →</a>
+    </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>©LAKHAN 2025 Smart Energy Management System</p>
-    </footer>
+    <div class="card">
+      <h2>☀️ Solar Calculator + Govt Subsidy</h2>
+      <p>
+        Estimate ideal solar system size, government subsidy under
+        PM Surya Ghar Yojana and your monthly savings.
+      </p>
+      <a href="solar/solar-calculator.html">Calculate Solar Savings →</a>
+    </div>
+  </div>
 
-    <!-- Link JavaScript -->
-    <script src="script.js"></script>
+  <div class="info">
+    <div>🇮🇳 Designed for Indian electricity tariffs</div>
+    <div>💰 Shows real ₹ savings & subsidies</div>
+    <div>🔋 Useful for homes, students & engineers</div>
+  </div>
+
+  <footer>
+    east or west ⚡lakhan⚡is best
+  </footer>
+</div>
+
 </body>
 </html>
